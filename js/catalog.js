@@ -17,11 +17,17 @@ function renderProductos(lista) {
     grid.innerHTML = '<p class="catalog__loading">No hay productos disponibles.</p>';
     return;
   }
-  grid.innerHTML = lista.map(p => `
+function getImagenes(p) {
+  return p.imagenes || (p.imagenURL ? [p.imagenURL] : []);
+}
+
+  grid.innerHTML = lista.map(p => {
+    const imgs = getImagenes(p);
+    return `
     <div class="product-card">
       <div class="product-card__img-wrap" onclick="abrirQuickView('${p.id}')">
         <img
-          src="${p.imagenURL || 'img/placeholder.png'}"
+          src="${imgs[0] || 'img/placeholder.png'}"
           alt="${p.nombre}"
           class="product-card__img"
           loading="lazy"
@@ -29,6 +35,7 @@ function renderProductos(lista) {
         />
         <div class="product-card__badge-wrap">
           ${p.destacado ? '<span class="product-card__badge">Destacado</span>' : ''}
+          ${imgs.length > 1 ? `<span class="product-card__badge product-card__badge--count">+${imgs.length - 1}</span>` : ''}
         </div>
       </div>
       <div class="product-card__body">
@@ -50,8 +57,8 @@ function renderProductos(lista) {
           </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 // ---------- FILTRAR ----------
@@ -136,18 +143,36 @@ window.agregarAlCarrito = function(id) {
   addToCart(prod, talla, 1);
 };
 
-// ---- QUICK VIEW (placeholder para Fase 2) ----
+// ---- QUICK VIEW CON GALERÍA ----
 window.abrirQuickView = function(id) {
   const prod = productos.find(p => p.id === id);
   if (!prod) return;
 
+  const imgs = getImagenes(prod);
   const tallasHtml = prod.tallas?.length
     ? prod.tallas.map(t => `<option value="${t}">${t}</option>`).join('')
     : '';
 
+  const galeriaHtml = imgs.length > 1 ? `
+    <div class="qv__gallery" data-qv-id="${prod.id}">
+      <div class="qv__gallery-main">
+        <img src="${imgs[0] || 'img/placeholder.png'}" alt="" class="qv__gallery-img" id="qv-img-${prod.id}" onerror="this.src='img/placeholder.png'" />
+        <button class="qv__gallery-nav qv__gallery-nav--prev" onclick="qvNav('${prod.id}', -1)">◀</button>
+        <button class="qv__gallery-nav qv__gallery-nav--next" onclick="qvNav('${prod.id}', 1)">▶</button>
+      </div>
+      <div class="qv__gallery-dots">
+        ${imgs.map((_, i) => `<span class="qv__gallery-dot ${i === 0 ? 'active' : ''}" onclick="qvGo('${prod.id}', ${i})"></span>`).join('')}
+      </div>
+    </div>
+  ` : `
+    <div class="qv__img-single">
+      <img src="${imgs[0] || 'img/placeholder.png'}" alt="${prod.nombre}" onerror="this.src='img/placeholder.png'" />
+    </div>
+  `;
+
   const html = `
     <div class="qv__img">
-      <img src="${prod.imagenURL || 'img/placeholder.png'}" alt="${prod.nombre}" onerror="this.src='img/placeholder.png'" />
+      ${galeriaHtml}
     </div>
     <div class="qv__info">
       ${prod.categoria ? `<p class="qv__cat">${prod.categoria}</p>` : ''}
@@ -171,6 +196,34 @@ window.abrirQuickView = function(id) {
   modal.className = 'qv-modal';
   modal.innerHTML = `<div class="qv-modal__backdrop" onclick="this.parentElement.remove()"></div><div class="qv-modal__content">${html}<button class="qv-modal__close" onclick="this.closest('.qv-modal').remove()">&times;</button></div>`;
   document.body.appendChild(modal);
+};
+
+let _qvIndices = {};
+
+window.qvNav = function(id, dir) {
+  const prod = productos.find(p => p.id === id);
+  if (!prod) return;
+  const imgs = getImagenes(prod);
+  if (!_qvIndices[id]) _qvIndices[id] = 0;
+  _qvIndices[id] = (_qvIndices[id] + dir + imgs.length) % imgs.length;
+  const idx = _qvIndices[id];
+  const img = document.getElementById(`qv-img-${id}`);
+  if (img) img.src = imgs[idx];
+  document.querySelectorAll(`[data-qv-id="${id}"] .qv__gallery-dot`).forEach((d, i) => {
+    d.classList.toggle('active', i === idx);
+  });
+};
+
+window.qvGo = function(id, i) {
+  const prod = productos.find(p => p.id === id);
+  if (!prod) return;
+  const imgs = getImagenes(prod);
+  _qvIndices[id] = i;
+  const img = document.getElementById(`qv-img-${id}`);
+  if (img) img.src = imgs[i];
+  document.querySelectorAll(`[data-qv-id="${id}"] .qv__gallery-dot`).forEach((d, j) => {
+    d.classList.toggle('active', j === i);
+  });
 };
 
 window.agregarQV = function(id) {

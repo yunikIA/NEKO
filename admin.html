@@ -159,16 +159,15 @@
           </div>
         </div>
         <div class="form__group">
-          <label for="prodImagen">Imagen (URL)</label>
-          <div class="form__image-input">
-            <input type="text" id="prodImagen" placeholder="https://ejemplo.com/imagen.jpg" />
-            <button type="button" class="btn btn--outline" id="convertDriveBtn" style="flex-shrink:0;">Drive</button>
+          <label>Imágenes</label>
+          <div class="form__image-add">
+            <input type="text" id="prodImagenInput" placeholder="https://..." />
+            <button type="button" class="btn btn--outline" id="convertDriveBtn">Drive</button>
+            <button type="button" class="btn btn--gold" id="addImageBtn">+</button>
           </div>
-          <small>Pegá link de Google Drive, Instagram o cualquier imagen directa.</small>
-          <div class="form__image-preview" id="imagePreview" style="display:none;">
-            <img src="" alt="Vista previa" id="imagePreviewImg" />
-            <span class="form__image-preview-ok">✓ Vista previa</span>
-          </div>
+          <small>Pegá URLs de Google Drive, Imgur, Instagram, etc. La imagen debe ser pública. Podés agregar varias.</small>
+          <div class="image-list" id="imageList"></div>
+          <input type="hidden" id="prodImagenes" value="" />
         </div>
         <div class="form__group">
           <label for="prodDestacado">

@@ -422,38 +422,78 @@
   color: var(--white) !important;
 }
 
-/* =================== IMAGE INPUT =================== */
+/* =================== IMAGE MANAGER =================== */
 
-.form__image-input {
+.form__image-add {
   display: flex;
   gap: 8px;
 }
 
-.form__image-input input {
+.form__image-add input {
   flex: 1;
 }
 
-.form__image-preview {
+.image-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.image-list__empty {
+  font-size: 0.78rem;
+  color: var(--secondary);
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.image-list__item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-top: 12px;
-  padding: 10px 14px;
+  gap: 10px;
+  padding: 8px 12px;
   background: var(--bg2);
   border: 1px solid var(--border);
 }
 
-.form__image-preview img {
-  width: 48px;
-  height: 48px;
+.image-list__item-img {
+  width: 44px;
+  height: 44px;
   object-fit: cover;
-  border-radius: 2px;
+  flex-shrink: 0;
   background: #e8e2d8;
 }
 
-.form__image-preview-ok {
+.image-list__item-url {
+  flex: 1;
   font-size: 0.72rem;
-  color: var(--accent2);
+  color: var(--secondary);
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.image-list__item-del {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #e05a4e;
+  cursor: pointer;
+  padding: 2px 6px;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.image-list__item-del:hover { opacity: 0.6; }
+
+.admin-table__img-count {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  background: var(--text);
+  color: var(--white);
+  font-size: 0.55rem;
+  font-weight: 600;
+  padding: 2px 6px;
   letter-spacing: 1px;
 }
 

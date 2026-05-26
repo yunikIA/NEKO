@@ -25,6 +25,8 @@ function addToCart(producto, talla, cantidad = 1) {
   let items = getCart();
   const idx = items.findIndex(i => i.id === producto.id && i.talla === talla);
 
+  const primerImg = (producto.imagenes && producto.imagenes[0]) || producto.imagenURL || '';
+
   if (idx !== -1) {
     items[idx].cantidad += cantidad;
   } else {
@@ -32,7 +34,7 @@ function addToCart(producto, talla, cantidad = 1) {
       id: producto.id,
       nombre: producto.nombre,
       precio: producto.precio,
-      imagenURL: producto.imagenURL || '',
+      imagenURL: primerImg,
       talla: talla || 'Única',
       cantidad
     });

@@ -21,11 +21,12 @@ const prodNombre = document.getElementById('prodNombre');
 const prodDescripcion = document.getElementById('prodDescripcion');
 const prodPrecio = document.getElementById('prodPrecio');
 const prodCategoria = document.getElementById('prodCategoria');
-const prodImagen = document.getElementById('prodImagen');
 const prodDestacado = document.getElementById('prodDestacado');
+const prodImagenInput = document.getElementById('prodImagenInput');
 const convertDriveBtn = document.getElementById('convertDriveBtn');
-const imagePreview = document.getElementById('imagePreview');
-const imagePreviewImg = document.getElementById('imagePreviewImg');
+const addImageBtn = document.getElementById('addImageBtn');
+const imageList = document.getElementById('imageList');
+const prodImagenes = document.getElementById('prodImagenes');
 
 const sidebarLinks = document.querySelectorAll('.admin-sidebar__link');
 const tabs = document.querySelectorAll('.admin-tab');
@@ -53,19 +54,20 @@ function openModal(editData) {
     prodDescripcion.value = editData.descripcion || '';
     prodPrecio.value = editData.precio;
     prodCategoria.value = editData.categoria;
-    prodImagen.value = editData.imagenURL || '';
     prodDestacado.checked = editData.destacado || false;
     document.querySelectorAll('.talla-check').forEach(cb => {
       cb.checked = (editData.tallas || []).includes(cb.value);
     });
-    actualizarPreview(editData.imagenURL || '');
+    _imagenesTemp = [...(editData.imagenes || (editData.imagenURL ? [editData.imagenURL] : []))];
+    renderImageList();
   } else {
     productForm.reset();
     prodId.value = '';
     modalTitle.textContent = 'Nuevo producto';
     formSubmitBtn.textContent = 'Guardar';
     document.querySelectorAll('.talla-check').forEach(cb => cb.checked = false);
-    actualizarPreview('');
+    _imagenesTemp = [];
+    renderImageList();
   }
   modal.classList.add('open');
 }
@@ -78,43 +80,61 @@ modal.addEventListener('click', e => {
   if (e.target.classList.contains('modal__backdrop')) closeModal();
 });
 
-// ---- DRIVE LINK CONVERTER ----
+// ---- MULTI-IMAGE MANAGER ----
+let _imagenesTemp = [];
+
 function convertirDriveLink(url) {
-  // drive.google.com/file/d/FILE_ID/view
   const match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
   if (match) {
-    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    const id = match[1];
+    return `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
   }
-  // drive.google.com/open?id=FILE_ID
   const match2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
   if (match2) {
-    return `https://drive.google.com/uc?export=view&id=${match2[1]}`;
+    return `https://drive.google.com/thumbnail?id=${match2[1]}&sz=w1200`;
   }
   return url;
 }
 
-function actualizarPreview(url) {
-  const preview = document.getElementById('imagePreview');
-  const img = document.getElementById('imagePreviewImg');
-  if (url && url.trim()) {
-    preview.style.display = 'flex';
-    img.src = url.trim();
-  } else {
-    preview.style.display = 'none';
-    img.src = '';
+function renderImageList() {
+  if (!_imagenesTemp.length) {
+    imageList.innerHTML = '<p class="image-list__empty">Sin imágenes</p>';
+    prodImagenes.value = '';
+    return;
   }
+  imageList.innerHTML = _imagenesTemp.map((url, i) => `
+    <div class="image-list__item">
+      <img src="${url}" alt="" class="image-list__item-img" onerror="this.src='img/placeholder.png'" />
+      <span class="image-list__item-url">${url.length > 50 ? url.slice(0, 50) + '…' : url}</span>
+      <button class="image-list__item-del" onclick="removeImage(${i})">&times;</button>
+    </div>
+  `).join('');
+  prodImagenes.value = JSON.stringify(_imagenesTemp);
 }
 
-convertDriveBtn.addEventListener('click', () => {
-  const url = prodImagen.value.trim();
-  if (!url) return;
-  const convertida = convertirDriveLink(url);
-  prodImagen.value = convertida;
-  actualizarPreview(convertida);
-});
+window.removeImage = function(idx) {
+  _imagenesTemp.splice(idx, 1);
+  renderImageList();
+};
 
-prodImagen.addEventListener('input', () => {
-  actualizarPreview(prodImagen.value);
+function addImage(url) {
+  url = url.trim();
+  if (!url) return;
+  url = convertirDriveLink(url);
+  _imagenesTemp.push(url);
+  renderImageList();
+  prodImagenInput.value = '';
+  prodImagenInput.focus();
+}
+
+addImageBtn.addEventListener('click', () => addImage(prodImagenInput.value));
+prodImagenInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') addImage(prodImagenInput.value);
+});
+convertDriveBtn.addEventListener('click', () => {
+  const url = prodImagenInput.value.trim();
+  if (!url) return;
+  prodImagenInput.value = convertirDriveLink(url);
 });
 
 // ---- FORM SUBMIT ----
@@ -124,15 +144,14 @@ productForm.addEventListener('submit', async (e) => {
   const tallas = [];
   document.querySelectorAll('.talla-check:checked').forEach(cb => tallas.push(cb.value));
 
-  const imagenURL = prodImagen.value.trim();
-
   const data = {
     nombre: prodNombre.value.trim(),
     descripcion: prodDescripcion.value.trim(),
     precio: parseFloat(prodPrecio.value),
     categoria: prodCategoria.value,
     tallas,
-    imagenURL,
+    imagenURL: _imagenesTemp[0] || '',
+    imagenes: _imagenesTemp,
     destacado: prodDestacado.checked
   };
 
@@ -163,9 +182,15 @@ async function renderTable() {
       tbody.innerHTML = '<tr><td colspan="6">No hay productos todavía.</td></tr>';
       return;
     }
-    tbody.innerHTML = productos.map(p => `
+    tbody.innerHTML = productos.map(p => {
+      const imgs = p.imagenes || (p.imagenURL ? [p.imagenURL] : []);
+      const badge = imgs.length > 1 ? `<span class="admin-table__img-count">+${imgs.length - 1}</span>` : '';
+      return `
       <tr>
-        <td><img src="${p.imagenURL || 'img/placeholder.png'}" alt="${p.nombre}" class="admin-table__img" onerror="this.src='img/placeholder.png'" /></td>
+        <td style="position:relative;">
+          <img src="${imgs[0] || 'img/placeholder.png'}" alt="${p.nombre}" class="admin-table__img" onerror="this.src='img/placeholder.png'" />
+          ${badge}
+        </td>
         <td><strong>${p.nombre}</strong></td>
         <td>${p.categoria || '—'}</td>
         <td>$${Number(p.precio).toFixed(2)}</td>
@@ -176,8 +201,8 @@ async function renderTable() {
             <button class="btn btn--outline" style="border-color:#e05a4e;color:#e05a4e;" onclick="eliminarProducto('${p.id}')">Eliminar</button>
           </div>
         </td>
-      </tr>
-    `).join('');
+      </tr>`;
+    }).join('');
   } catch (err) {
     tbody.innerHTML = '<tr><td colspan="6">Error al cargar.</td></tr>';
   }
