@@ -165,7 +165,14 @@
             <button type="button" class="btn btn--outline" id="convertDriveBtn">Drive</button>
             <button type="button" class="btn btn--gold" id="addImageBtn">+</button>
           </div>
-          <small>Pegá URLs de Google Drive, Imgur, Instagram, etc. La imagen debe ser pública. Podés agregar varias.</small>
+          <div class="form__image-upload">
+            <label class="btn btn--outline form__image-upload-btn">
+              Subir desde PC
+              <input type="file" id="cloudinaryFile" accept="image/*" hidden />
+            </label>
+            <span class="form__image-upload-status" id="uploadStatus"></span>
+          </div>
+          <small>Pegá URLs o subí imágenes desde tu PC. Las imágenes se alojan en Cloudinary.</small>
           <div class="image-list" id="imageList"></div>
           <input type="hidden" id="prodImagenes" value="" />
         </div>
@@ -185,6 +192,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
   <script src="js/firebase-config.js"></script>
+  <script src="js/cloudinary.js"></script>
   <script src="js/firestore.js"></script>
   <script src="js/admin.js"></script>
 </body>

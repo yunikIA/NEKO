@@ -27,6 +27,8 @@ const convertDriveBtn = document.getElementById('convertDriveBtn');
 const addImageBtn = document.getElementById('addImageBtn');
 const imageList = document.getElementById('imageList');
 const prodImagenes = document.getElementById('prodImagenes');
+const cloudinaryFile = document.getElementById('cloudinaryFile');
+const uploadStatus = document.getElementById('uploadStatus');
 
 const sidebarLinks = document.querySelectorAll('.admin-sidebar__link');
 const tabs = document.querySelectorAll('.admin-tab');
@@ -135,6 +137,28 @@ convertDriveBtn.addEventListener('click', () => {
   const url = prodImagenInput.value.trim();
   if (!url) return;
   prodImagenInput.value = convertirDriveLink(url);
+});
+
+// ---- CLOUDINARY UPLOAD ----
+cloudinaryFile.addEventListener('change', async () => {
+  const file = cloudinaryFile.files[0];
+  if (!file) return;
+
+  try {
+    uploadStatus.textContent = 'Subiendo...';
+    uploadStatus.style.color = 'var(--secondary)';
+    const url = await subirACloudinary(file);
+    _imagenesTemp.push(url);
+    renderImageList();
+    uploadStatus.textContent = '✓ Subida correctamente';
+    uploadStatus.style.color = 'var(--accent2)';
+  } catch (err) {
+    uploadStatus.textContent = 'Error: ' + err.message;
+    uploadStatus.style.color = '#e05a4e';
+  }
+
+  cloudinaryFile.value = '';
+  setTimeout(() => { uploadStatus.textContent = ''; }, 4000);
 });
 
 // ---- FORM SUBMIT ----

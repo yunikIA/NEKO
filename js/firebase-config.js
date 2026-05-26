@@ -16,3 +16,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 const storage = firebase.storage();
+
+// Cloudinary
+const CLOUD_NAME = 'mediaflows_98e875';
+const UPLOAD_PRESET = 'neko_preset';

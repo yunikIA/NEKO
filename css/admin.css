@@ -497,6 +497,29 @@
   letter-spacing: 1px;
 }
 
+/* =================== IMAGE UPLOAD =================== */
+
+.form__image-upload {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.form__image-upload-btn {
+  cursor: pointer;
+  font-size: 0.62rem;
+  padding: 8px 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form__image-upload-status {
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+}
+
 /* =================== RESPONSIVE =================== */
 
 @media (max-width: 768px) {
