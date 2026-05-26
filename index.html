@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEKO — Tienda de Ropa</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner container">
+      <a href="index.html" class="header__logo">
+        <img src="img/logo.png" alt="NEKO" class="header__logo-img" />
+        <span class="header__logo-text">NEKO</span>
+      </a>
+      <nav class="header__nav">
+        <a href="index.html" class="header__link active">Tienda</a>
+        <a href="admin.html" class="header__link">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero__stripe"></div>
+    <span class="hero__number">SS / 26</span>
+    <div class="hero__content container">
+      <div class="hero__tag">Nueva Colección</div>
+      <h1 class="hero__title">VESTÍ<br><span>SIN</span><br>LÍMITES</h1>
+      <p class="hero__subtitle">Piezas que definen tu identidad</p>
+      <a href="#catalog" class="hero__cta">Ver catálogo</a>
+    </div>
+  </section>
+
+  <section class="catalog container" id="catalog">
+    <div class="catalog__top">
+      <div>
+        <h2 class="catalog__title">Catálogo</h2>
+        <p class="catalog__count" id="productCount">Cargando...</p>
+      </div>
+      <div class="catalog__filters">
+        <select id="filterCategory" class="catalog__select">
+          <option value="all">Categoría</option>
+          <option value="camisetas">Camisetas</option>
+          <option value="pantalones">Pantalones</option>
+          <option value="chaquetas">Chaquetas</option>
+          <option value="accesorios">Accesorios</option>
+        </select>
+        <select id="filterSort" class="catalog__select">
+          <option value="default">Ordenar</option>
+          <option value="price-asc">Menor precio</option>
+          <option value="price-desc">Mayor precio</option>
+          <option value="name">A-Z</option>
+        </select>
+      </div>
+    </div>
+    <div class="catalog__grid" id="productGrid">
+      <p class="catalog__loading">Cargando productos...</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__inner container">
+      <span class="footer__brand">NEKO</span>
+      <p class="footer__text">&copy; 2026 — Todos los derechos reservados</p>
+    </div>
+  </footer>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firestore.js"></script>
+  <script src="js/catalog.js"></script>
+</body>
+</html>
