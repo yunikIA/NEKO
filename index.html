@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NEKO — Tienda de Ropa</title>
+  <title>NEKO — Design & Performance</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -17,7 +17,9 @@
   <header class="header">
     <div class="header__inner container">
       <a href="index.html" class="header__logo">
+        <img src="img/logo.png" alt="NEKO" class="header__logo-img" />
         <span class="header__logo-text">NEKO</span>
+        <span class="header__logo-kanji">猫</span>
       </a>
       <nav class="header__nav">
         <a href="index.html" class="header__link active">Tienda</a>
@@ -27,19 +29,44 @@
   </header>
 
   <section class="hero">
-    <div class="hero__stripe"></div>
-    <span class="hero__number">SS / 26</span>
-    <div class="hero__content container">
+    <div class="hero__left container">
+      <div class="hero__kanji-bg">猫</div>
       <div class="hero__tag">Nueva Colección</div>
-      <h1 class="hero__title">VESTÍ<br><span>SIN</span><br>LÍMITES</h1>
-      <p class="hero__subtitle">Piezas que definen tu identidad</p>
-      <a href="#catalog" class="hero__cta">Ver catálogo</a>
+      <h1 class="hero__title">Design &amp;<br><em>Performance</em></h1>
+      <p class="hero__subtitle">Neko from Japan — SS 2026</p>
+      <a href="#catalog" class="btn btn--light">Ver colección</a>
+    </div>
+    <div class="hero__right">
+      <div class="hero__right-grid">
+        <div class="hero__right-cell">Kyoto</div>
+        <div class="hero__right-cell--accent hero__right-cell">京都市</div>
+        <div class="hero__right-cell--accent hero__right-cell">猫</div>
+        <div class="hero__right-cell">Tokyo</div>
+      </div>
     </div>
   </section>
 
+  <div class="brand-strip">
+    <div class="brand-strip__inner">
+      <span class="brand-strip__item">Neko From Japan</span>
+      <span class="brand-strip__item">Design &amp; Performance</span>
+      <span class="brand-strip__item">京都市</span>
+      <span class="brand-strip__item">Nueva Colección 2026</span>
+      <span class="brand-strip__item">Neko From Japan</span>
+      <span class="brand-strip__item">Design &amp; Performance</span>
+      <span class="brand-strip__item">京都市</span>
+      <span class="brand-strip__item">Nueva Colección 2026</span>
+      <span class="brand-strip__item">Neko From Japan</span>
+      <span class="brand-strip__item">Design &amp; Performance</span>
+      <span class="brand-strip__item">京都市</span>
+      <span class="brand-strip__item">Nueva Colección 2026</span>
+    </div>
+  </div>
+
   <section class="catalog container" id="catalog">
     <div class="catalog__top">
-      <div>
+      <div class="catalog__title-wrap">
+        <div class="catalog__eyebrow">Colección</div>
         <h2 class="catalog__title">Catálogo</h2>
         <p class="catalog__count" id="productCount">Cargando...</p>
       </div>
@@ -67,6 +94,7 @@
   <footer class="footer">
     <div class="footer__inner container">
       <span class="footer__brand">NEKO</span>
+      <span class="footer__kanji">猫</span>
       <p class="footer__text">&copy; 2026 — Todos los derechos reservados</p>
     </div>
   </footer>

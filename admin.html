@@ -6,16 +6,17 @@
   <title>NEKO — Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/admin.css" />
 </head>
 <body>
 
-  <!-- LOGIN SCREEN -->
+  <!-- LOGIN -->
   <div class="admin-login" id="adminLogin">
     <div class="admin-login__box">
-      <h1 class="admin-login__title">NEKO Admin</h1>
+      <p class="admin-login__title">NEKO Admin</p>
+      <span class="admin-login__kanji">猫</span>
       <p class="admin-login__desc">Iniciá sesión con Google para administrar la tienda.</p>
       <button class="btn btn--gold" id="loginBtn">Iniciar sesión con Google</button>
       <p class="admin-login__error" id="loginError"></p>
@@ -23,12 +24,12 @@
     </div>
   </div>
 
-  <!-- ADMIN DASHBOARD -->
+  <!-- DASHBOARD -->
   <div class="admin-dashboard" id="adminDashboard" style="display:none;">
-
     <aside class="admin-sidebar">
       <div class="admin-sidebar__top">
         <span class="admin-sidebar__brand">NEKO</span>
+        <span class="admin-sidebar__kanji">猫</span>
       </div>
       <nav class="admin-sidebar__nav">
         <button class="admin-sidebar__link active" data-tab="products">Productos</button>
@@ -42,8 +43,6 @@
     </aside>
 
     <main class="admin-main">
-
-      <!-- TAB: PRODUCTOS -->
       <section class="admin-tab active" id="tabProducts">
         <div class="admin-tab__header">
           <h2>Productos</h2>
@@ -53,12 +52,8 @@
           <table class="admin-table">
             <thead>
               <tr>
-                <th>Imagen</th>
-                <th>Nombre</th>
-                <th>Categoría</th>
-                <th>Precio</th>
-                <th>Tallas</th>
-                <th>Acciones</th>
+                <th>Imagen</th><th>Nombre</th><th>Categoría</th>
+                <th>Precio</th><th>Tallas</th><th>Acciones</th>
               </tr>
             </thead>
             <tbody id="productsTableBody">
@@ -68,11 +63,8 @@
         </div>
       </section>
 
-      <!-- TAB: AJUSTES -->
       <section class="admin-tab" id="tabSettings">
-        <div class="admin-tab__header">
-          <h2>Administradores autorizados</h2>
-        </div>
+        <div class="admin-tab__header"><h2>Administradores</h2></div>
         <div class="admin-emails">
           <p class="admin-emails__desc">Los siguientes emails pueden acceder al panel de administración.</p>
           <div class="admin-emails__add">
@@ -88,7 +80,7 @@
     </main>
   </div>
 
-  <!-- MODAL PRODUCTO -->
+  <!-- MODAL -->
   <div class="modal" id="productModal">
     <div class="modal__backdrop"></div>
     <div class="modal__content">
