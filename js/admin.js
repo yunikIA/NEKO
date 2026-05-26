@@ -22,8 +22,10 @@ const prodDescripcion = document.getElementById('prodDescripcion');
 const prodPrecio = document.getElementById('prodPrecio');
 const prodCategoria = document.getElementById('prodCategoria');
 const prodImagen = document.getElementById('prodImagen');
-const prodImagenFile = document.getElementById('prodImagenFile');
 const prodDestacado = document.getElementById('prodDestacado');
+const convertDriveBtn = document.getElementById('convertDriveBtn');
+const imagePreview = document.getElementById('imagePreview');
+const imagePreviewImg = document.getElementById('imagePreviewImg');
 
 const sidebarLinks = document.querySelectorAll('.admin-sidebar__link');
 const tabs = document.querySelectorAll('.admin-tab');
@@ -56,12 +58,14 @@ function openModal(editData) {
     document.querySelectorAll('.talla-check').forEach(cb => {
       cb.checked = (editData.tallas || []).includes(cb.value);
     });
+    actualizarPreview(editData.imagenURL || '');
   } else {
     productForm.reset();
     prodId.value = '';
     modalTitle.textContent = 'Nuevo producto';
     formSubmitBtn.textContent = 'Guardar';
     document.querySelectorAll('.talla-check').forEach(cb => cb.checked = false);
+    actualizarPreview('');
   }
   modal.classList.add('open');
 }
@@ -74,6 +78,45 @@ modal.addEventListener('click', e => {
   if (e.target.classList.contains('modal__backdrop')) closeModal();
 });
 
+// ---- DRIVE LINK CONVERTER ----
+function convertirDriveLink(url) {
+  // drive.google.com/file/d/FILE_ID/view
+  const match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (match) {
+    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  }
+  // drive.google.com/open?id=FILE_ID
+  const match2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (match2) {
+    return `https://drive.google.com/uc?export=view&id=${match2[1]}`;
+  }
+  return url;
+}
+
+function actualizarPreview(url) {
+  const preview = document.getElementById('imagePreview');
+  const img = document.getElementById('imagePreviewImg');
+  if (url && url.trim()) {
+    preview.style.display = 'flex';
+    img.src = url.trim();
+  } else {
+    preview.style.display = 'none';
+    img.src = '';
+  }
+}
+
+convertDriveBtn.addEventListener('click', () => {
+  const url = prodImagen.value.trim();
+  if (!url) return;
+  const convertida = convertirDriveLink(url);
+  prodImagen.value = convertida;
+  actualizarPreview(convertida);
+});
+
+prodImagen.addEventListener('input', () => {
+  actualizarPreview(prodImagen.value);
+});
+
 // ---- FORM SUBMIT ----
 productForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -81,20 +124,7 @@ productForm.addEventListener('submit', async (e) => {
   const tallas = [];
   document.querySelectorAll('.talla-check:checked').forEach(cb => tallas.push(cb.value));
 
-  let imagenURL = prodImagen.value.trim();
-
-  if (prodImagenFile.files[0]) {
-    try {
-      formSubmitBtn.textContent = 'Subiendo imagen...';
-      formSubmitBtn.disabled = true;
-      imagenURL = await uploadImagen(prodImagenFile.files[0]);
-    } catch (err) {
-      alert('Error al subir la imagen: ' + err.message + '\n\nAsegurate de tener Firebase Storage habilitado y las reglas configuradas.');
-      formSubmitBtn.textContent = prodId.value ? 'Guardar cambios' : 'Guardar';
-      formSubmitBtn.disabled = false;
-      return;
-    }
-  }
+  const imagenURL = prodImagen.value.trim();
 
   const data = {
     nombre: prodNombre.value.trim(),

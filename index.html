@@ -25,6 +25,14 @@
         <a href="index.html" class="header__link active">Tienda</a>
         <a href="admin.html" class="header__link">Admin</a>
       </nav>
+      <button class="header__cart" id="cartToggle" aria-label="Abrir bolsa">
+        <svg class="header__cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span class="header__cart-count" id="cartCount">0</span>
+      </button>
     </div>
   </header>
 
@@ -91,6 +99,27 @@
     </div>
   </section>
 
+  <!-- CARRITO SIDEBAR -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-sidebar__header">
+      <h3>Tu bolsa</h3>
+      <button class="cart-sidebar__close" id="cartClose">&times;</button>
+    </div>
+    <div class="cart-sidebar__items" id="cartItems">
+      <p class="cart-sidebar__empty">Tu bolsa está vacía.</p>
+    </div>
+    <div class="cart-sidebar__footer">
+      <div class="cart-sidebar__total">
+        <span>Total</span>
+        <strong id="cartTotal">$0.00</strong>
+      </div>
+      <button class="btn btn--gold cart-sidebar__checkout" id="cartCheckout">
+        Enviar pedido por WhatsApp
+      </button>
+    </div>
+  </div>
+
   <!-- SECCIÓN CONTACTO — se llena dinámicamente desde Firestore -->
   <section class="contacto" id="contactSection"></section>
 
@@ -104,6 +133,7 @@
 
   <script src="js/firebase-config.js"></script>
   <script src="js/firestore.js"></script>
+  <script src="js/cart.js"></script>
   <script src="js/catalog.js"></script>
 </body>
 </html>

@@ -19,7 +19,7 @@ function renderProductos(lista) {
   }
   grid.innerHTML = lista.map(p => `
     <div class="product-card">
-      <div class="product-card__img-wrap">
+      <div class="product-card__img-wrap" onclick="abrirQuickView('${p.id}')">
         <img
           src="${p.imagenURL || 'img/placeholder.png'}"
           alt="${p.nombre}"
@@ -37,10 +37,17 @@ function renderProductos(lista) {
         <p class="product-card__desc">${p.descripcion || ''}</p>
         <div class="product-card__footer">
           <span class="product-card__price">$${Number(p.precio).toFixed(2)}</span>
-          ${p.tallas?.length ? `
-            <div class="product-card__tallas">
-              ${p.tallas.map(t => `<span class="product-card__talla">${t}</span>`).join('')}
-            </div>` : ''}
+          <div class="product-card__actions">
+            ${p.tallas?.length ? `
+              <select class="product-card__talla-select" id="talla-${p.id}">
+                <option value="">Talle</option>
+                ${p.tallas.map(t => `<option value="${t}">${t}</option>`).join('')}
+              </select>
+            ` : '<input type="hidden" id="talla-' + p.id + '" value="Única" />'}
+            <button class="product-card__add-btn" onclick="agregarAlCarrito('${p.id}')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -113,4 +120,70 @@ async function init() {
 
 filterCategory.addEventListener('change', filtrarYOrdenar);
 filterSort.addEventListener('change', filtrarYOrdenar);
+
+// ---- AGREGAR AL CARRITO ----
+window.agregarAlCarrito = function(id) {
+  const prod = productos.find(p => p.id === id);
+  if (!prod) return;
+
+  const select = document.getElementById(`talla-${id}`);
+  let talla = 'Única';
+  if (select && select.tagName === 'SELECT') {
+    talla = select.value;
+    if (!talla) { alert('Seleccioná un talle primero.'); return; }
+  }
+
+  addToCart(prod, talla, 1);
+};
+
+// ---- QUICK VIEW (placeholder para Fase 2) ----
+window.abrirQuickView = function(id) {
+  const prod = productos.find(p => p.id === id);
+  if (!prod) return;
+
+  const tallasHtml = prod.tallas?.length
+    ? prod.tallas.map(t => `<option value="${t}">${t}</option>`).join('')
+    : '';
+
+  const html = `
+    <div class="qv__img">
+      <img src="${prod.imagenURL || 'img/placeholder.png'}" alt="${prod.nombre}" onerror="this.src='img/placeholder.png'" />
+    </div>
+    <div class="qv__info">
+      ${prod.categoria ? `<p class="qv__cat">${prod.categoria}</p>` : ''}
+      <h2 class="qv__name">${prod.nombre}</h2>
+      <p class="qv__desc">${prod.descripcion || ''}</p>
+      <p class="qv__price">$${Number(prod.precio).toFixed(2)}</p>
+      ${prod.tallas?.length ? `
+        <div class="qv__tallas">
+          <label>Talle:</label>
+          <select id="qv-talla-${prod.id}">
+            <option value="">Seleccionar</option>
+            ${tallasHtml}
+          </select>
+        </div>
+      ` : ''}
+      <button class="btn btn--gold qv__btn" onclick="agregarQV('${prod.id}')">Agregar a la bolsa</button>
+    </div>
+  `;
+
+  const modal = document.createElement('div');
+  modal.className = 'qv-modal';
+  modal.innerHTML = `<div class="qv-modal__backdrop" onclick="this.parentElement.remove()"></div><div class="qv-modal__content">${html}<button class="qv-modal__close" onclick="this.closest('.qv-modal').remove()">&times;</button></div>`;
+  document.body.appendChild(modal);
+};
+
+window.agregarQV = function(id) {
+  const prod = productos.find(p => p.id === id);
+  if (!prod) return;
+  const select = document.getElementById(`qv-talla-${id}`);
+  let talla = 'Única';
+  if (select) {
+    talla = select.value;
+    if (!talla) { alert('Seleccioná un talle primero.'); return; }
+  }
+  addToCart(prod, talla, 1);
+  document.querySelector('.qv-modal')?.remove();
+};
+
 init();

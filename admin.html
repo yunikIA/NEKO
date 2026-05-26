@@ -160,9 +160,15 @@
         </div>
         <div class="form__group">
           <label for="prodImagen">Imagen (URL)</label>
-          <input type="text" id="prodImagen" placeholder="https://ejemplo.com/imagen.jpg" />
-          <small>O subí un archivo desde tu computadora:</small>
-          <input type="file" id="prodImagenFile" accept="image/*" />
+          <div class="form__image-input">
+            <input type="text" id="prodImagen" placeholder="https://ejemplo.com/imagen.jpg" />
+            <button type="button" class="btn btn--outline" id="convertDriveBtn" style="flex-shrink:0;">Drive</button>
+          </div>
+          <small>Pegá link de Google Drive, Instagram o cualquier imagen directa.</small>
+          <div class="form__image-preview" id="imagePreview" style="display:none;">
+            <img src="" alt="Vista previa" id="imagePreviewImg" />
+            <span class="form__image-preview-ok">✓ Vista previa</span>
+          </div>
         </div>
         <div class="form__group">
           <label for="prodDestacado">

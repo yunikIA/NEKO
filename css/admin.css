@@ -422,6 +422,41 @@
   color: var(--white) !important;
 }
 
+/* =================== IMAGE INPUT =================== */
+
+.form__image-input {
+  display: flex;
+  gap: 8px;
+}
+
+.form__image-input input {
+  flex: 1;
+}
+
+.form__image-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+}
+
+.form__image-preview img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 2px;
+  background: #e8e2d8;
+}
+
+.form__image-preview-ok {
+  font-size: 0.72rem;
+  color: var(--accent2);
+  letter-spacing: 1px;
+}
+
 /* =================== RESPONSIVE =================== */
 
 @media (max-width: 768px) {
