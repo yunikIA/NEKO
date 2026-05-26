@@ -33,6 +33,7 @@
       </div>
       <nav class="admin-sidebar__nav">
         <button class="admin-sidebar__link active" data-tab="products">Productos</button>
+        <button class="admin-sidebar__link" data-tab="contacto">Contacto</button>
         <button class="admin-sidebar__link" data-tab="settings">Ajustes</button>
       </nav>
       <div class="admin-sidebar__bottom">
@@ -43,6 +44,8 @@
     </aside>
 
     <main class="admin-main">
+
+      <!-- TAB: PRODUCTOS -->
       <section class="admin-tab active" id="tabProducts">
         <div class="admin-tab__header">
           <h2>Productos</h2>
@@ -63,10 +66,44 @@
         </div>
       </section>
 
+      <!-- TAB: CONTACTO -->
+      <section class="admin-tab" id="tabContacto">
+        <div class="admin-tab__header">
+          <h2>Contacto & Redes</h2>
+        </div>
+        <div class="admin-contacto">
+          <p class="admin-emails__desc">Estos datos aparecen en la sección de contacto de la tienda. Dejá en blanco los que no uses.</p>
+          <form id="contactoForm" autocomplete="off">
+            <div class="form__group">
+              <label for="ctaWhatsapp">WhatsApp (número con código de país)</label>
+              <input type="text" id="ctaWhatsapp" placeholder="+5491112345678" />
+            </div>
+            <div class="form__group">
+              <label for="ctaInstagram">Instagram (usuario sin @)</label>
+              <input type="text" id="ctaInstagram" placeholder="neko.ropa" />
+            </div>
+            <div class="form__group">
+              <label for="ctaFacebook">Facebook (usuario o página)</label>
+              <input type="text" id="ctaFacebook" placeholder="nekoropa" />
+            </div>
+            <div class="form__group">
+              <label for="ctaTiktok">TikTok (usuario sin @)</label>
+              <input type="text" id="ctaTiktok" placeholder="neko.oficial" />
+            </div>
+            <div class="form__group">
+              <label for="ctaTexto">Texto descriptivo (opcional)</label>
+              <textarea id="ctaTexto" rows="2" placeholder="Seguinos y escribinos para más info"></textarea>
+            </div>
+            <button type="submit" class="btn btn--gold" id="contactoSaveBtn">Guardar cambios</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB: AJUSTES -->
       <section class="admin-tab" id="tabSettings">
         <div class="admin-tab__header"><h2>Administradores</h2></div>
         <div class="admin-emails">
-          <p class="admin-emails__desc">Los siguientes emails pueden acceder al panel de administración.</p>
+          <p class="admin-emails__desc">Los siguientes emails pueden acceder al panel.</p>
           <div class="admin-emails__add">
             <input type="email" id="newEmailInput" placeholder="correo@ejemplo.com" class="admin-emails__input" />
             <button class="btn btn--gold" id="addEmailBtn">Agregar</button>
@@ -80,7 +117,7 @@
     </main>
   </div>
 
-  <!-- MODAL -->
+  <!-- MODAL PRODUCTO -->
   <div class="modal" id="productModal">
     <div class="modal__backdrop"></div>
     <div class="modal__content">
@@ -124,7 +161,7 @@
         <div class="form__group">
           <label for="prodImagen">Imagen (URL)</label>
           <input type="text" id="prodImagen" placeholder="https://ejemplo.com/imagen.jpg" />
-          <small>O subí un archivo:</small>
+          <small>O subí un archivo desde tu computadora:</small>
           <input type="file" id="prodImagenFile" accept="image/*" />
         </div>
         <div class="form__group">
