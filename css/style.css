@@ -503,3 +503,10 @@ img { max-width: 100%; display: block; }
   .header__link { padding: 0 14px; font-size: 0.7rem; }
   .footer__inner { height: auto; padding: 16px 0; justify-content: center; text-align: center; }
 }
+
+/* =================== HERO FIX =================== */
+.hero__content {
+  position: relative;
+  z-index: 2;
+}
+
