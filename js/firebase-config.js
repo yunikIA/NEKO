@@ -19,4 +19,4 @@ const storage = firebase.storage();
 
 // Cloudinary
 const CLOUD_NAME = 'mediaflows_98e875';
-const UPLOAD_PRESET = 'neko_preset';
+const UPLOAD_PRESET = 'neko_unsigned';
